@@ -4,6 +4,8 @@ import configuration from 'src/config/config';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { Todo } from 'src/models/todo';
 import { User } from 'src/models/user';
+import { UsersModule } from '../users/users.module';
+import { TodosModule } from '../todos/todos.module';
 
 @Module({
   imports: [
@@ -25,7 +27,8 @@ import { User } from 'src/models/user';
         autoLoadModels: true,
         models: [Todo, User]
       })
-    })
-  ],
+    }),
+    UsersModule, TodosModule 
+  ], 
 })
 export class AppModule { }
