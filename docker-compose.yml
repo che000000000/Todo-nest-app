@@ -30,16 +30,16 @@ services:
 
   redis: 
     container_name: redis
-    image: redis:5.0
+    image: redis:7.0
     restart: always
     ports: 
-      - "5448:5442"
+      - "6379:6379"
     command: redis-server --requirepass ${REDIS_PASSWORD}
     volumes: 
       - redis_data:/data
-    networks: 
+    networks:
       - backend
-
+    
 volumes: 
   postgres_data:
   redis_data:

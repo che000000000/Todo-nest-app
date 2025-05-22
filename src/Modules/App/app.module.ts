@@ -39,6 +39,6 @@ import { Token } from 'src/models/token';
       }
     }),
     UsersModule, TodosModule 
-  ], 
+  ],
 })
 export class AppModule { }
