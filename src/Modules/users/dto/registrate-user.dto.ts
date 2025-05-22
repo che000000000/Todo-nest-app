@@ -4,6 +4,12 @@ export class RegistrateUserDto {
     @IsString()
     userName: string
 
+    @IsString()
+    email: string
+
+    @IsString()
+    password: string
+
     @IsOptional()
     @IsArray()
     @ArrayNotEmpty()
