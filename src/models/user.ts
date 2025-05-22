@@ -25,7 +25,13 @@ export class User extends Model {
     })
     userName: string
 
-     @Column({
+    @Column({
+        type: DataType.STRING,
+        allowNull: false,
+    })
+    password: string
+
+    @Column({
         type: DataType.STRING,
         allowNull: true,
         defaultValue: null,
@@ -33,10 +39,10 @@ export class User extends Model {
     avatarUrl?: string | null
 
     @Column({
-        type: DataType.STRING,
+        type: DataType.ENUM("CREDENTIALS", "GOOGLE", "YANDEX"),
         allowNull: false,
     })
-    password: string
+    authMethod: string
 
     @Column({
         type: DataType.ENUM("REGULAR", "ADMIN"),

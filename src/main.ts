@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './modules/app/app.module';
 import { ConfigService } from '@nestjs/config';
+import { Logger } from '@nestjs/common';
 import IORedis from 'ioredis'
 import * as cookieParser from 'cookie-parser'
 import * as session from 'express-session'
@@ -8,12 +9,18 @@ import * as connectRedis from 'connect-redis'
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
+  const appLogger = new Logger('')
 
   const configService = app.get(ConfigService)
 
   const redisUri = configService.get('redis.uri')
   if (!redisUri) throw new Error('Redis URI is not configured')
   const redisClient = new IORedis(redisUri)
+
+  const redisLogger = new Logger('RedisSetup')
+  redisClient.on('connect', () => {
+    redisLogger.log(`Redis connected! Username - ${redisClient.options.username}; Port - ${redisClient.options.port}`)
+  })
 
   const redisStore = new connectRedis.RedisStore({
     client: redisClient,
@@ -31,7 +38,7 @@ async function bootstrap() {
       cookie: {
         domain: configService.get('session.domain') || "localhost",
         maxAge: 86400 * 1000,
-        httpOnly: configService.get('session.httpOnly') || true, 
+        httpOnly: configService.get('session.httpOnly') || true,
         secure: configService.get('session.secure') || false,
         sameSite: 'lax'
       },
@@ -46,7 +53,8 @@ async function bootstrap() {
 
   const appPort = configService.get('app.port') || 6870
   await app.listen(appPort).then(
-    () => console.log(`App working on port - ${appPort}.`)
+    () => appLogger.log(`App worked on port - ${appPort}`)
   )
 }
+
 bootstrap()
