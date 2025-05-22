@@ -5,7 +5,10 @@ import { v4 } from "uuid";
 export class Todo extends Model {
     @PrimaryKey
     @Default(v4)
-    @Column(DataType.UUID)
+    @Column({
+        type: DataType.UUID,
+        allowNull: false,
+    })
     id: string = v4()
 
     @Column({
@@ -24,4 +27,11 @@ export class Todo extends Model {
         defaultValue: false
     })
     isComplete: boolean
+
+    @Column({
+        type: DataType.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
+    })
+    isPrivate: boolean
 }
