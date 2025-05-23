@@ -23,7 +23,7 @@ export class AuthService {
         const isExists = await this.usersService.findUserByEmail(dto.email)
         if (isExists) throw new BadRequestException('This email already using.')
 
-        const newUser = await this.usersService.createUser({
+        return await this.usersService.createUser({
             userName: dto.userName,
             email: dto.email,
             password: await this.comparePasswords(dto.password, dto.repeatPassword),
@@ -58,12 +58,7 @@ export class AuthService {
     private async saveSession(req: Request, user: User) {
         return new Promise((resolve, reject) => {
             req.session.userId = user.dataValues.id
-
-            req.session.cookie.maxAge = 86400000
-            req.session.cookie.httpOnly = true // доработать
-            req.session.cookie.secure = false // доработать
-            req.session.cookie.sameSite = this.configService.get('session.sameSite') || 'lax'
-
+            
             req.session.save(error => {
                 if (error) {
                     return reject(

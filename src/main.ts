@@ -39,7 +39,7 @@ async function bootstrap() {
         maxAge: 86400 * 1000, // Доработать
         httpOnly: true, // Доработать
         secure: false, // Доработать
-        sameSite: 'lax'
+        sameSite: configService.get('session.sameSite') || 'lax'
       },
       store: redisStore,
     })
