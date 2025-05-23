@@ -1,7 +1,8 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { User } from 'src/models/user';
-import { RegistrateUserDto } from './dto/registrate-user.dto';
+import { CreateUser } from './dto/create-user.dto';
+import * as bcrypt from 'bcrypt'
 
 @Injectable()
 export class UsersService {
@@ -15,15 +16,16 @@ export class UsersService {
         return this.usersRepository.findOne({ where: { email: user_email } })
     }
 
-    async createUser(dto: RegistrateUserDto): Promise<User> {
+    async createUser(dto: CreateUser): Promise<User> {
         const isUserEmailRegAlready = await this.findUserByEmail(dto.email)
         if (isUserEmailRegAlready) throw new BadRequestException('User with this email already exists')
         const newUser = await this.usersRepository.create({
-            userName: dto.userName,
             email: dto.email,
-            password: dto.password,
-            specialization: dto.specialization,
-            avatarUrl: dto.avatarUrl
+            userName: dto.userName,
+            password: await bcrypt.hash(dto.password, 10),
+            avatarUrl: dto.avatarUrl,
+            authMethod: "CREDENTIALS",
+            role: "REGULAR",
         })
         return newUser
     }

@@ -8,6 +8,7 @@ import { UsersModule } from '../users/users.module';
 import { TodosModule } from '../todos/todos.module';
 import { Account } from 'src/models/account';
 import { Token } from 'src/models/token';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
   imports: [
@@ -38,7 +39,7 @@ import { Token } from 'src/models/token';
         }
       }
     }),
-    UsersModule, TodosModule 
-  ], 
+    UsersModule, TodosModule, AuthModule
+  ],
 })
 export class AppModule { }
