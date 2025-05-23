@@ -30,18 +30,18 @@ async function bootstrap() {
   app.use(
     cookieParser(configService.get('session.cookiesSecret') || "secret"),
     session({
-      store: redisStore,
       secret: configService.get('session.sessionSecret') || 'secret',
       name: configService.get('session.name') || 'secret',
       resave: true,
       saveUninitialized: false,
       cookie: {
         domain: configService.get('session.domain') || "localhost",
-        maxAge: 86400 * 1000,
-        httpOnly: configService.get('session.httpOnly') || true,
-        secure: configService.get('session.secure') || false,
+        maxAge: 86400 * 1000, // Доработать
+        httpOnly: true, // Доработать
+        secure: false, // Доработать
         sameSite: 'lax'
       },
+      store: redisStore,
     })
   )
 

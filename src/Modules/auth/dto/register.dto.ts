@@ -1,25 +1,25 @@
 import { IsEmail, IsNotEmpty, IsOptional, IsString, MinLength } from "class-validator";
 
 export class RegisterDto {
-    @IsString({ message: "Имя пользователя должно быть строкой." })
-    @IsNotEmpty({ message: "Не введено имя пользователя." })
+    @IsString({ message: "Username should be string." })
+    @IsNotEmpty({ message: "Username not entered." })
     userName: string
 
-    @IsString({ message: "Эл. почта должна быть строкой." })
-    @IsEmail({}, { message: "Введённая строка не является почтой." })
-    @IsNotEmpty({ message: "Не введена почта." })
+    @IsString({ message: "Email should be string." })
+    @IsEmail({}, { message: "Email should be email type." })
+    @IsNotEmpty({ message: "Email not entered." })
     email: string
 
-    @IsString({ message: "Пароль должен быть строкой." })
+    @IsString({ message: "Password should be string." })
     @IsNotEmpty({ message: "Не введён пароль." })
-    @MinLength(6, { message: "Пароль должен быть не короче 6 символов." })
+    @MinLength(6, { message: "Password should be consist of minimum six simbols." })
     password: string
 
     @IsString()
-    @IsNotEmpty({ message: "Подтвердите пароль." })
+    @IsNotEmpty({ message: "Repeat password." })
     repeatPassword: string
 
     @IsOptional()
-    @IsString({ message: "Ссылка на картинку для аватара не является строкой" })
+    @IsString({ message: "Avatar url should be string." })
     avatarUrl?: string
 }

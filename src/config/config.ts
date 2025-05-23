@@ -27,6 +27,7 @@ export default () => ({
     domain: process.env.SESSION_DOMAIN,
     httpOnly: process.env.SESSION_HTTP_ONLY,
     secure: process.env.SESSION_SECURE,
+    sameSite: process.env.SESSION_SAME_SITE,
     folder: process.env.SESSION_FOLDER
   }
 })
