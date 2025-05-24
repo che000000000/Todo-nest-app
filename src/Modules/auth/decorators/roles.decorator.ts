@@ -1,10 +1,6 @@
 import { SetMetadata } from "@nestjs/common"
-
-export const enum UserRole { // ХАРДКОД. Доработать
-    REGULAR = 'REGULAR',
-    ADMIN = 'ADMIN'
-} 
+import { UserRole } from "src/models/user"
 
 export const ROLES_KEY = 'roles'
 
-export const Roles = (...roles: UserRole[]) => SetMetadata(ROLES_KEY, roles)
+export const Roles = (role: UserRole) => SetMetadata(ROLES_KEY, role)

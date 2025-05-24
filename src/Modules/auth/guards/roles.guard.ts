@@ -1,6 +1,7 @@
 import { Injectable, CanActivate, ExecutionContext, ForbiddenException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { ROLES_KEY, UserRole } from '../decorators/roles.decorator';
+import { ROLES_KEY } from '../decorators/roles.decorator';
+import { UserRole } from 'src/models/user';
 
 @Injectable()
 export class RolesGuard implements CanActivate {
@@ -9,13 +10,13 @@ export class RolesGuard implements CanActivate {
   public async canActivate(context: ExecutionContext): Promise<boolean> {
     const roles = this.reflector.getAllAndOverride<UserRole[]>(ROLES_KEY, [
         context.getHandler(),
-        context.getClass
+        context.getClass()
     ])
     const request = context.switchToHttp().getRequest()
 
     if(!roles) return true
 
-    if(!roles.includes(request.user.dataValues.role)) throw new ForbiddenException('You have no roots for access this resource.')
+    if(!roles.includes(request.user.dataValues.role)) throw new ForbiddenException('Not enough rights.')
 
     return true
   }
