@@ -10,8 +10,8 @@ export class AuthController {
 
     @HttpCode(HttpStatus.OK)
     @Post('register')
-    register(@Body(ValidationPipe) dto: RegisterDto, @Req() req: Request) {
-        return this.authService.register(dto, req)
+    register(@Body(ValidationPipe) dto: RegisterDto) {
+        return this.authService.register(dto)
     }
 
     @HttpCode(HttpStatus.OK)
