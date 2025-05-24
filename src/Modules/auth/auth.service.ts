@@ -19,7 +19,7 @@ export class AuthService {
         else throw new BadRequestException('Passwords not mutch.')
     }
 
-    async register(dto: RegisterDto, req: Request) {
+    async register(dto: RegisterDto) {
         const isExists = await this.usersService.findUserByEmail(dto.email)
         if (isExists) throw new BadRequestException('This email already using.')
 
@@ -33,11 +33,11 @@ export class AuthService {
 
     async login(dto: LoginDto, req: Request) {
         const foundUser = await this.usersService.findUserByEmail(dto.email)
-
         if (!foundUser || !foundUser.dataValues.password) throw new NotFoundException('User does not exist.')
 
         const isValidPassword = await bcrypt.compare(dto.password, foundUser.dataValues.password)
         if (!isValidPassword) throw new UnauthorizedException('Incorrect password.')
+
         return this.saveSession(req, foundUser)
     }
 
@@ -58,7 +58,7 @@ export class AuthService {
     private async saveSession(req: Request, user: User) {
         return new Promise((resolve, reject) => {
             req.session.userId = user.dataValues.id
-            
+
             req.session.save(error => {
                 if (error) {
                     return reject(

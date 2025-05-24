@@ -1,16 +1,16 @@
-import { BadRequestException, Body, Controller, Get, ParseUUIDPipe, Post, Query, ValidationPipe } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { CreateUser } from './dto/create-user.dto';
-import { appExceptions } from 'src/Exceptions/exceptions';
+import { Authorized } from '../auth/decorators/authorized.decorator';
+import { Authorizaton } from '../auth/decorators/auth.decorator';
+import { UserRole } from 'src/models/user';
 
 @Controller('users')
 export class UsersController {
-    constructor(private readonly usersService: UsersService) {}
+    constructor(private readonly usersService: UsersService) { }
 
-    @Get('get-one')
-    getUserData (@Query('userId', new ParseUUIDPipe()) userId: string) {
-        const foundUser = this.usersService.findUserById(userId)
-        if(foundUser) return foundUser
-        else throw new BadRequestException(appExceptions.userNotFound)
+    @Authorizaton(UserRole.REGULAR)
+    @Get('profile')
+    getUserProfile(@Authorized() userId: string) {
+        return this.usersService.findUserById(userId)
     }
 }

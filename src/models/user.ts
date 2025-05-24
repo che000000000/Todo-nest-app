@@ -2,6 +2,17 @@ import { Column, DataType, Default, HasOne, Model, PrimaryKey, Table } from "seq
 import { v4 } from "uuid";
 import { Account } from "./account";
 
+export enum UserRole {
+    REGULAR = "REGULAR",
+    ADMIN = "ADMIN"
+}
+
+export enum AuthMethod {
+    CREDENTIALS = "CREDENTIALS",
+    GOOGLE = "GOOGLE",
+    YANDEX = "YANDEX"
+} 
+
 @Table({ tableName: "Users" })
 export class User extends Model {
     @PrimaryKey
@@ -39,13 +50,13 @@ export class User extends Model {
     avatarUrl?: string | null
 
     @Column({
-        type: DataType.ENUM("CREDENTIALS", "GOOGLE", "YANDEX"),
+        type: DataType.ENUM(...Object.values(AuthMethod)),
         allowNull: false,
     })
     authMethod: string
 
     @Column({
-        type: DataType.ENUM("REGULAR", "ADMIN"),
+        type: DataType.ENUM(...Object.values(UserRole)),
         allowNull: false,
         defaultValue: "REGULAR"
     })
