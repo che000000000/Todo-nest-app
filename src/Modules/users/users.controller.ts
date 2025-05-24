@@ -1,26 +1,16 @@
-import { BadRequestException, Body, Controller, Get, HttpCode, HttpStatus, ParseUUIDPipe, Post, Query, ValidationPipe } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { appExceptions } from 'src/Exceptions/exceptions';
-import { Authotized } from '../auth/decorators/authorized.decorator';
+import { Authorized } from '../auth/decorators/authorized.decorator';
 import { Authorizaton } from '../auth/decorators/auth.decorator';
+import { UserRole } from '../auth/decorators/roles.decorator';
 
 @Controller('users')
 export class UsersController {
     constructor(private readonly usersService: UsersService) { }
 
-    @HttpCode(HttpStatus.OK)
-    @Get('get-one')
-    getUserData(@Query('userId', new ParseUUIDPipe()) userId: string) {
-        const foundUser = this.usersService.findUserById(userId)
-        if (foundUser) return foundUser
-        else throw new BadRequestException(appExceptions.userNotFound)
-    }
-
-    @Authorizaton()
-    @HttpCode(HttpStatus.OK)
+    @Authorizaton(UserRole.REGULAR)
     @Get('profile')
-    getUserProfile(@Authotized('id') userId: string) {
-        console.log('userId: ', userId)
+    getUserProfile(@Authorized('id') userId: string) {
         return this.usersService.findUserById(userId)
     }
 }
